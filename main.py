@@ -7,7 +7,7 @@ import re
 app = Flask(__name__)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-MODEL_ID = "ModelSave"
+MODEL_ID = "mzman123/musa-chef-gpt"
 tokenizer = AutoTokenizer.from_pretrained("auhide/chef-gpt-en")
 chef_gpt = AutoModelForCausalLM.from_pretrained(MODEL_ID)
 chef_gpt.to(device)
