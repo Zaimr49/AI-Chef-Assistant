@@ -4,45 +4,48 @@ import axios from 'axios';
 function RecipeSteps({ steps }) {
   const [images, setImages] = useState(new Array(steps.length).fill(null));
   const [loading, setLoading] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
-    console.log('Model URL:', process.env.REACT_APP_HUGGINGFACE_MODEL_URL);
-console.log('API Key:', process.env.REACT_APP_HUGGINGFACE_API_KEY);
-
     const fetchImages = async () => {
+      if (retryCount >= 3) { // Stop retrying after 3 attempts
+        console.error("Failed to fetch images after 3 attempts.");
+        return;
+      }
+
       setLoading(true);
+      console.log("Attempting to fetch images, attempt:", retryCount + 1);
       try {
-        console.log("Getting Images")
         const promises = steps.map(step =>
           axios.post(process.env.REACT_APP_HUGGINGFACE_MODEL_URL, {
-            inputs: step.description
+            inputs: step
           }, {
             headers: { 'Authorization': `Bearer ${process.env.REACT_APP_HUGGINGFACE_API_KEY}` },
-            responseType: 'arraybuffer'  // Treat the response as binary data
+            responseType: 'arraybuffer'
           }).then(response => {
-            // Convert binary data to a base64 string
             const base64 = btoa(
               new Uint8Array(response.data).reduce(
                 (data, byte) => data + String.fromCharCode(byte),
                 ''
               )
             );
-            return `data:image/jpeg;base64,${base64}`;  // Prepare the base64 image URL
+            return `data:image/jpeg;base64,${base64}`;
           })
         );
         const imageUrls = await Promise.all(promises);
-        console.log("Got Images")
+        console.log("Successfully fetched images")
+        console.log(imageUrls)
         setImages(imageUrls);
       } catch (error) {
         console.error('Failed to fetch images', error);
+        setRetryCount(retryCount + 1); // Increment retry count and try again
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    if (steps.length > 0) {
-      fetchImages();
-    }
-  }, [steps]);  // Effect runs every time 'steps' changes
+    fetchImages();
+  }, [steps, retryCount]); // Retry when steps change or retry count increases
 
   return (
     <div>
@@ -55,9 +58,9 @@ console.log('API Key:', process.env.REACT_APP_HUGGINGFACE_API_KEY);
             {loading ? (
               <p>Loading image...</p>
             ) : (
-                <>
-              <img src={images[index] || 'placeholder-image-url'} alt={`Visualization for step ${index + 1}`} className="img-fluid" />
-                </>
+              <>
+                <img src={images[index] || 'placeholder-image-url'} alt={`Visualization for step ${index + 1}`} className="img-fluid" />
+              </>
             )}
           </div>
         </div>
