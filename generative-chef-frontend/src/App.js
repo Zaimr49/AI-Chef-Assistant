@@ -16,9 +16,10 @@ function App() {
     event.preventDefault();
     setLoading(true);
     try {
-      // const response = await axios.post('http://your-backend-url/api/recipes', { ingredients });
-      // setSteps(response.data);
-      setSteps(['season chops with salt and pepper', 'heat oil in large saute pan over medium-high heat']);
+      const backend_url = ""
+      const response = await axios.post(backend_url, { ingredients });
+      setSteps(response.data);
+      // setSteps(['season chops with salt and pepper', 'heat oil in large saute pan over medium-high heat']);
       setLoading(false);
     } catch (error) {
       console.error('Failed to fetch recipes', error);
