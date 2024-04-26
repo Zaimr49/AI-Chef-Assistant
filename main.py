@@ -1,16 +1,13 @@
 import os
 from flask import Flask, request, jsonify
-import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import re
 
 app = Flask(__name__)
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 MODEL_ID = "mzman123/musa-chef-gpt"
 tokenizer = AutoTokenizer.from_pretrained("auhide/chef-gpt-en")
 chef_gpt = AutoModelForCausalLM.from_pretrained(MODEL_ID)
-chef_gpt.to(device)
 print("Model Loaded")
 
 
@@ -25,9 +22,8 @@ def generate_from_model():
     if isinstance(data, list):
         # Assuming your model generates responses based on input strings
         # Here, I'm just returning the input strings as is for demonstration
-        prompt_tokens = tokenizer(f"ingredients>> {','.join(data)} ; recipe>>",return_tensors="pt")
-        print("Prompt = ",f"ingredients>> {','.join(data)} ; recipe>>")
-        prompt_tokens.to(device)
+        prompt_tokens = tokenizer(f"ingredients>> {', '.join(data)} ; recipe>>",return_tensors="pt")
+        print("Prompt = ",f"ingredients>> {', '.join(data)} ; recipe>>")
         output_test = chef_gpt.generate(
                 prompt_tokens.input_ids, 
                 do_sample=True, 
