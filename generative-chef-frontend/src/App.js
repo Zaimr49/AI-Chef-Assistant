@@ -52,7 +52,7 @@ function App() {
       <h1 className="text-center header-title">
   Generative AI Chef
 </h1>
-
+<p className="text-center">Enter ingredients one at a time and press "Get Recipe" to see how you can cook them into a delicious dish!</p>
 
       <InputGroup className="mb-3">
         <FormControl
