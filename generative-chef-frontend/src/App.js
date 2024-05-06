@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, Form, Button, InputGroup, FormControl, ListGroup, Spinner } from 'react-bootstrap';
+import { Container, Button, InputGroup, FormControl, ListGroup, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import RecipeSteps from './RecipeSteps';
 
@@ -38,6 +38,8 @@ function App() {
       const backend_url = "http://localhost:3000/generate"; 
       // setSteps(['jam','egg']);
       const response = await axios.post(backend_url, { ingredients: ingredientsString });
+      console.log(response);
+      // setSteps(response.data);
       setSteps(response.data);
       // setSteps(['season chops with salt and pepper', 'heat oil in large saute pan over medium-high heat']);
       setLoading(false);
