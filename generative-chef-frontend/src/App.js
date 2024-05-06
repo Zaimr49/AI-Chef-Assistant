@@ -36,9 +36,9 @@ function App() {
     try {
       const ingredientsString = ingredients.join(', ');
       const backend_url = "http://localhost:3000/generate"; 
-      setSteps(['jam','egg']);
+      // setSteps(['jam','egg']);
       const response = await axios.post(backend_url, { ingredients: ingredientsString });
-      // setSteps(response.data);
+      setSteps(response.data);
       // setSteps(['season chops with salt and pepper', 'heat oil in large saute pan over medium-high heat']);
       setLoading(false);
     } catch (error) {
