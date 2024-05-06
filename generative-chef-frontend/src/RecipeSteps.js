@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Spinner } from 'react-bootstrap';
 
 function RecipeSteps({ steps }) {
   const [images, setImages] = useState(new Array(steps.length).fill(null));
@@ -44,19 +45,26 @@ function RecipeSteps({ steps }) {
       }
     };
 
-    fetchImages();
+    // there are steps only then fetch images
+    if (steps.length > 0)
+      {
+        fetchImages();
+      }
   }, [steps, retryCount]); // Retry when steps change or retry count increases
 
   return (
     <div>
       {steps.length > 0 && <h2>Recipe Steps</h2>}
       {steps.map((step, index) => (
-        <div key={index} className="card mt-3">
+        <div key={index} className="card mt-3 bg-dark text-white border border-primary">
           <div className="card-body">
             <h5 className="card-title">Step {index + 1}</h5>
             <p className="card-text">{step}</p>
             {loading ? (
-              <p>Loading image...</p>
+              <>
+              <p>Loading Image</p>
+              <Spinner animation="border" variant="primary" />
+              </>
             ) : (
               <>
                 <img src={images[index] || 'placeholder-image-url'} alt={`Visualization for step ${index + 1}`} className="img-fluid" />

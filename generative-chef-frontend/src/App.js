@@ -1,24 +1,44 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Form, Button, InputGroup, FormControl, ListGroup, Spinner } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 import RecipeSteps from './RecipeSteps';
 
 function App() {
-  const [ingredients, setIngredients] = useState('');
+  const [ingredients, setIngredients] = useState([]);
+  const [newIngredient, setNewIngredient] = useState('');
   const [steps, setSteps] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (event) => {
-    setIngredients(event.target.value);
+  const handleIngredientChange = (event) => {
+    setNewIngredient(event.target.value);
+  };
+
+  const addIngredient = () => {
+    if (newIngredient) {
+      setIngredients(prev => [...prev, newIngredient]);
+      setNewIngredient('');
+    }
+  };
+
+  const removeIngredient = (index) => {
+    setIngredients(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (event) => {
+    // check if there are ingredients 
+    if (ingredients.length === 0) {
+      alert('Please enter at least one ingredient');
+      return;
+    }
     event.preventDefault();
     setLoading(true);
     try {
-      const backend_url = "localhost:3000/generate"
-      const response = await axios.post(backend_url, { ingredients });
-      setSteps(response.data);
+      const ingredientsString = ingredients.join(', ');
+      const backend_url = "http://localhost:3000/generate"; 
+      // const response = await axios.post(backend_url, { ingredients: ingredientsString });
+      // setSteps(response.data);
+      setSteps(['jam','egg']);
       // setSteps(['season chops with salt and pepper', 'heat oil in large saute pan over medium-high heat']);
       setLoading(false);
     } catch (error) {
@@ -28,26 +48,43 @@ function App() {
   };
 
   return (
-    <div className="container mt-5">
-      <h1>Generative AI Chef</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="ingredientsInput" className="form-label">Ingredients</label>
-          <input
-            type="text"
-            className="form-control"
-            id="ingredientsInput"
-            value={ingredients}
-            onChange={handleInputChange}
-            placeholder="Enter ingredients separated by commas"
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">Get Recipe</button>
-      </form>
+    <Container className="mt-5 bg-dark text-white" style={{ paddingBottom: '20px', borderRadius: '15px' }}>
+      <h1 className="text-center header-title">
+  Generative AI Chef
+</h1>
 
-      {loading && <p>Loading...</p>}
+
+      <InputGroup className="mb-3">
+        <FormControl
+          placeholder="Enter an ingredient"
+          aria-label="Enter an ingredient"
+          aria-describedby="basic-addon2"
+          value={newIngredient}
+          onChange={handleIngredientChange}
+          className='bg-dark text-white mx-2'
+        />
+        <Button variant="primary" onClick={addIngredient}>
+          Add Ingredient
+        </Button>
+      </InputGroup>
+      <ListGroup>
+        {ingredients.length > 0 && <h2>Ingredients</h2>}
+        {ingredients.map((ingredient, index) => (
+          <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center bg-dark text-white">
+            {ingredient}
+            <Button variant="danger" size="sm" onClick={() => removeIngredient(index)}>
+              Remove
+            </Button>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+      <div className="text-center mt-4">
+        <Button variant="success" onClick={handleSubmit} disabled={loading}>
+          {loading ? <Spinner as="span" aanimation="border" variant="primary" size="sm" role="status" aria-hidden="true" /> : "Get Recipe"}
+        </Button>
+      </div>
       <RecipeSteps steps={steps} />
-    </div>
+    </Container>
   );
 }
 
