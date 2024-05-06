@@ -58,8 +58,8 @@ function RecipeSteps({ steps }) {
       {steps.map((step, index) => (
         <div key={index} className="card mt-3 bg-dark text-white border border-muted" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
         <div className="card-body text-center"> {/* Added text-center */}
-          <h5 className="card-title">Step {index + 1}</h5>
-          <p className="card-text">{step}</p>
+          <h2 className="card-title">Step {index + 1}</h2>
+          <h5 className="card-text">{step}</h5>
           {loading ? (
             <>
               <p>Loading Image</p>
@@ -67,7 +67,7 @@ function RecipeSteps({ steps }) {
             </>
           ) : (
             <>
-              <img src={images[index] || 'placeholder-image-url'} alt={`Visualization for step ${index + 1}`} className="img-fluid mx-auto d-block" style={{ maxWidth: '200px' }} /> {/* Modified style and added classes */}
+              <img src={images[index] || 'placeholder-image-url'} alt={`Visualization for step ${index + 1}`} className="img-fluid mx-auto d-block" style={{ maxWidth: '350px' }} /> {/* Modified style and added classes */}
             </>
           )}
         </div>
