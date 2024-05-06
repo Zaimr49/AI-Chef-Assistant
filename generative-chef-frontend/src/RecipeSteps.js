@@ -42,7 +42,7 @@ function RecipeSteps({ steps }) {
         setRetryCount(retryCount + 1); // Increment retry count and try again
       } finally {
         setLoading(false);
-      }2
+      }
     };
 
     // there are steps only then fetch images
