@@ -16,7 +16,7 @@ function App() {
     event.preventDefault();
     setLoading(true);
     try {
-      const backend_url = ""
+      const backend_url = "localhost:3000/generate"
       const response = await axios.post(backend_url, { ingredients });
       setSteps(response.data);
       // setSteps(['season chops with salt and pepper', 'heat oil in large saute pan over medium-high heat']);
