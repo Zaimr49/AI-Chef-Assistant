@@ -17,7 +17,7 @@ Welcome to the AI Chef Assistant, a Flask-powered application that leverages art
 - 🤖 **AI-Powered & Personalized Recipe Suggestions**: Get recommendations and discover new recipes tailored to your ingredients. 🥗
 - 📚 **Comprehensive Ingredient Database**: Explore a vast database of ingredients with multiple recipes.
 - 🍽️ **Cooking Techniques**: Learn various cooking methods directly through the app with step-by-step guides.
-- **Dynamic Step-by-Step Visual Guides**: Utilizing a state-of-the-art diffusion model, our app generates custom images for each step of the recipe, making it easier to follow along and ensuring a delightful cooking experience. 🖼️
+- 🖼️ **Dynamic Step-by-Step Visual Guides**: Utilizing a state-of-the-art diffusion model, our app generates custom images for each step of the recipe, making it easier to follow along and ensuring a delightful cooking experience.
 
 
 ## 💁‍♀️ How to Use
